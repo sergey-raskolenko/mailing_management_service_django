@@ -42,6 +42,7 @@ INSTALLED_APPS = [
 ]
 
 MY_APPS = [
+    'users',
 
 ]
 
@@ -153,7 +154,7 @@ SERVER_EMAIL = EMAIL_HOST_USER
 EMAIL_ADMIN = EMAIL_HOST_USER
 
 # For users model
-# AUTH_USER_MODEL = 'users.User'
+AUTH_USER_MODEL = 'users.User'
 LOGOUT_REDIRECT_URL = '/'
 LOGIN_REDIRECT_URL = '/'
 

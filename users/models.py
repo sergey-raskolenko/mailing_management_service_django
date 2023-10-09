@@ -12,7 +12,6 @@ class UserManager(UserBaseManager):
     def _create_user(self, email, password, **extra_fields):
         if not email:
             raise ValueError("The given username must be set")
-        email = self.normalize_email(email)
         GlobalUserModel = apps.get_model(
             self.model._meta.app_label, self.model._meta.object_name
         )
@@ -40,10 +39,13 @@ class UserManager(UserBaseManager):
 
 
 class User(AbstractUser):
+
+    objects = UserManager()
+
     username = None
     email = models.EmailField(unique=True, verbose_name='почта')
 
-    first_name = models.CharField(max_length=150, verbose_name='имя',**NULLABLE)
+    first_name = models.CharField(max_length=150, verbose_name='имя', **NULLABLE)
     last_name = models.CharField(max_length=150, verbose_name='фамилия', **NULLABLE)
     avatar = models.ImageField(upload_to='users/', verbose_name='фото', **NULLABLE)
     token = models.CharField(max_length=200, verbose_name='токен верификации', **NULLABLE)
