@@ -57,3 +57,8 @@ class User(AbstractUser):
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'
         db_table = 'users'
+
+    def __str__(self):
+        if self.fist_name and self.last_name:
+            return f'{self.first_name} {self.last_name}'
+        return self.email

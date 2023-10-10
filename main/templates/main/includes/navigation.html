@@ -1,21 +1,10 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="#">MMS</a>
+    <a class="navbar-brand" href="{% url 'main:index'%}">MMS</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <div class="dropdown">
-            <button class="btn btn-secondary dropdown-toggle"
-                    type="button" id="dropdownMenu1" data-toggle="dropdown"
-                    aria-haspopup="true" aria-expanded="false">
-                Dropdown
-            </button>
-            <div class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                <a class="dropdown-item" href="#!">Action</a>
-                <a class="dropdown-item" href="#!">Another action</a>
-            </div>
-        </div>
         <ul class="navbar-nav mr-auto top-menu">
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="newsletterDropdown" role="button"
@@ -33,8 +22,8 @@
                     Письма
                 </a>
                 <div class="dropdown-menu" aria-labelledby="newsletterDropdown">
-                    <a class="dropdown-item" href="#">Список моих писем</a>
-                    <a class="dropdown-item" href="#">Создать письмо</a>
+                    <a class="dropdown-item" href="{% url 'message:list_message'%}">Список писем</a>
+                    <a class="dropdown-item" href="{% url 'message:create_message'%}">Создать письмо</a>
                 </div>
             </li>
             <li class="nav-item dropdown">
