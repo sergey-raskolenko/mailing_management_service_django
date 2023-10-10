@@ -59,18 +59,25 @@
                 <a class="nav-link dropdown-toggle" href="#" id="blogDropdown" role="button"
                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="fa-regular fa-user"></i>
+                    {% if request.user.is_authenticated %}
+                        {{ request.user }}
+                    {% endif %}
                 </a>
-                <ul class="dropdown-menu user-dropdown-menu" aria-labelledby="blogDropdown">
-                    <li>
-                        <a class="dropdown-item" href="#">
-                        </a>
-                    </li>
-                    <li><a class="dropdown-item" href="#">Выход</a></li>
-                </ul>
-                <ul class="dropdown-menu user-dropdown-menu" aria-labelledby="blogDropdown">
-                    <li><a class="dropdown-item" href="#">Регистрация</a></li>
-                    <li><a class="dropdown-item" href="#">Авторизация</a></li>
-                </ul>
+                {% if request.user.is_authenticated %}
+                    <ul class="dropdown-menu user-dropdown-menu" aria-labelledby="blogDropdown">
+                        <li>
+                            <a class="dropdown-item" href="{% url 'users:profile' %}">
+                                {{ request.user }}
+                            </a>
+                        </li>
+                        <li><a class="dropdown-item" href="{% url 'users:logout' %}">Выход</a></li>
+                    </ul>
+                {% else %}
+                    <ul class="dropdown-menu user-dropdown-menu" aria-labelledby="blogDropdown">
+                        <li><a class="dropdown-item" href="{% url 'users:register' %}">Регистрация</a></li>
+                        <li><a class="dropdown-item" href="{% url 'users:login' %}">Авторизация</a></li>
+                    </ul>
+                {% endif %}
             </li>
         </ul>
     </div>

@@ -59,6 +59,6 @@ class User(AbstractUser):
         db_table = 'users'
 
     def __str__(self):
-        if self.fist_name and self.last_name:
+        if self.first_name and self.last_name:
             return f'{self.first_name} {self.last_name}'
         return self.email

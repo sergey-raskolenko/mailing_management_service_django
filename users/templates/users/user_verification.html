@@ -1,0 +1,27 @@
+{% extends 'main/base.html' %}
+{% block title %}
+    Верификация пользователя
+{% endblock %}
+
+{% block header %}
+    Верификация пользователя
+{% endblock %}
+{% block content %}
+<div class="container ">
+    <div class="row justify-content-md-center">
+        <div class="col-6">
+            <div class="card">
+                <div class="card-body">
+                    <div class="form-floating">
+                        <p class="text-bg-info">
+                            На Вашу электронную почту отправлено письмо для подтверждения аккаунта.
+                            Пожалуйста, проверьте Вашу почту и перейдите по полученной ссылке.
+                            Если письма нет, проверьте папку "Спам"
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
