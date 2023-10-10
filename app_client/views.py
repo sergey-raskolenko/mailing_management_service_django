@@ -1,15 +1,15 @@
-from django.shortcuts import render, redirect
+
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, UpdateView, ListView, DeleteView, DetailView
+from django.views.generic import DetailView, ListView, DeleteView, UpdateView, CreateView
 
-from app_message.forms import MessageForm
-from app_message.models import Message
+from app_client.forms import ClientCreateForm
+from app_client.models import Client
 
 
-class MessageCreateView(CreateView):
-	model = Message
-	form_class = MessageForm
-	success_url = reverse_lazy('message:list_message')
+class ClientCreateView(CreateView):
+	model = Client
+	form_class = ClientCreateForm
+	success_url = reverse_lazy('client:list_client')
 
 	def form_valid(self, form):
 		message = form.save(commit=False)
@@ -24,10 +24,10 @@ class MessageCreateView(CreateView):
 		return context_data
 
 
-class MessageUpdateView(UpdateView):
-	model = Message
-	form_class = MessageForm
-	success_url = reverse_lazy('message:list_message')
+class ClientUpdateView(UpdateView):
+	model = Client
+	form_class = ClientCreateForm
+	success_url = reverse_lazy('client:list_client')
 
 	def get_context_data(self, **kwargs):
 		context_data = super().get_context_data(**kwargs)
@@ -35,30 +35,29 @@ class MessageUpdateView(UpdateView):
 		return context_data
 
 
-class MessageListView(ListView):
-	model = Message
+class ClientListView(ListView):
+	model = Client
 
 	def get_context_data(self, **kwargs):
 		context_data = super().get_context_data(**kwargs)
-		context_data['title'] = 'Все сообщения'
+		context_data['title'] = 'Все клиенты'
 		return context_data
 
 
-class MessageDetailView(DetailView):
-	model = Message
+class ClientDetailView(DetailView):
+	model = Client
 
 	def get_context_data(self, **kwargs):
 		context_data = super().get_context_data(**kwargs)
-		context_data['title'] = 'Просмотр сообщения'
+		context_data['title'] = 'Просмотр клиента'
 		return context_data
 
 
-class MessageDeleteView(DeleteView):
-	model = Message
-	success_url = reverse_lazy('message:list_message')
+class ClientDeleteView(DeleteView):
+	model = Client
+	success_url = reverse_lazy('client:list_client')
 
 	def get_context_data(self, **kwargs):
 		context_data = super().get_context_data(**kwargs)
-		context_data['title'] = 'Удаление сообщения'
+		context_data['title'] = 'Удаление клиента'
 		return context_data
-

@@ -1,0 +1,49 @@
+{% extends 'main/base.html' %}
+
+{% block title %}
+{{title}}
+{% endblock %}
+
+{% block header %}
+{{title}}
+{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <table class="table table-striped table-hover caption-top">
+                <thead>
+                <tr>
+                    <th scope="col">Email</th>
+                    <th scope="col">Имя</th>
+                    <th scope="col">Фамилия</th>
+                    <th scope="col">Отчество</th>
+                    <th scope="col">Создан</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <th scope="col">{{ object.email }}</th>
+                    <th scope="col">{{ object.name|default:"Неизвестен" }}</th>
+                    <th scope="col">{{ object.surname|default:"Неизвестен" }}</th>
+                    <th scope="col">{{ object.middle_name|default:"Неизвестен" }}</th>
+                    <th scope="col">{{ object.created_by|default:"Неизвестен" }}</th>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="card-footer">
+    <p class="card-text">Комментарий:</p>
+    <p class="card-text">{{ object.comment|default:"Неизвестен" }}</p>
+    <div class="btn-group">
+        <a href="{% url 'client:update_client' object.pk %}"
+           class="btn btn-sm btn-secondary">Редактировать</a>
+        <a href="{% url 'client:delete_client' object.pk %}"
+           class="btn btn-sm btn-danger">Удалить</a>
+    </div>
+</div>
+
+{% endblock %}

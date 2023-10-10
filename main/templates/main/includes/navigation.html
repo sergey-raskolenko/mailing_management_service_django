@@ -7,31 +7,31 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto top-menu">
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="newsletterDropdown" role="button"
+                <a class="nav-link dropdown-toggle" href="#" id="ClientsDropdown" role="button"
                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Клиенты
                 </a>
-                <div class="dropdown-menu" aria-labelledby="newsletterDropdown">
-                    <a class="dropdown-item" href="#">Список моих клиентов</a>
-                    <a class="dropdown-item" href="#">Создать клиента</a>
+                <div class="dropdown-menu" aria-labelledby="ClientsDropdown">
+                    <a class="dropdown-item" href="{% url 'client:list_client'%}">Список клиентов</a>
+                    <a class="dropdown-item" href="{% url 'client:create_client'%}">Создать клиента</a>
                 </div>
             </li>
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="newsletterDropdown" role="button"
+                <a class="nav-link dropdown-toggle" href="#" id="MessagesDropdown" role="button"
                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Письма
+                    Сообщения
                 </a>
-                <div class="dropdown-menu" aria-labelledby="newsletterDropdown">
-                    <a class="dropdown-item" href="{% url 'message:list_message'%}">Список писем</a>
-                    <a class="dropdown-item" href="{% url 'message:create_message'%}">Создать письмо</a>
+                <div class="dropdown-menu" aria-labelledby="MessagesDropdown">
+                    <a class="dropdown-item" href="{% url 'message:list_message'%}">Список сообщений</a>
+                    <a class="dropdown-item" href="{% url 'message:create_message'%}">Создать сообщение</a>
                 </div>
             </li>
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="newsletterDropdown" role="button"
+                <a class="nav-link dropdown-toggle" href="#" id="NewsletterDropdown" role="button"
                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Рассылки
                 </a>
-                <div class="dropdown-menu" aria-labelledby="newsletterDropdown">
+                <div class="dropdown-menu" aria-labelledby="NewsletterDropdown">
                     <a class="dropdown-item" href="#">
                         Список всех рассылок
                         Список моих рассылок
@@ -45,11 +45,11 @@
                 </div>
             </li>
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="newsletterDropdown" role="button"
+                <a class="nav-link dropdown-toggle" href="#" id="ManagersDropdown" role="button"
                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Менеджмент
                 </a>
-                <div class="dropdown-menu" aria-labelledby="newsletterDropdown">
+                <div class="dropdown-menu" aria-labelledby="ManagersDropdown">
                     <a class="dropdown-item" href="#">Список пользователей сервиса</a>
                 </div>
             </li>

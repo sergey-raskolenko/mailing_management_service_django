@@ -14,7 +14,7 @@
             <thead>
             <tr>
                 <th scope="col">id</th>
-                <th scope="col">Тема письма</th>
+                <th scope="col">Email клиента</th>
             </tr>
             </thead>
             <tbody>
@@ -22,13 +22,13 @@
                 <tr>
                     <th scope="row">{{ object.id }}</th>
                     <td>
-                        <a href="{% url 'message:detail_message' pk=object.pk %}">{{ object.subject }}</a>
+                        <a href="{% url 'client:detail_client' pk=object.pk %}">{{ object.email }}</a>
                     </td>
                 </tr>
             {% endfor %}
             </tbody>
         </table>
     {% else %}
-        <h3>Созданных сообщений нет</h3>
+        <h3>Созданных клиентов нет</h3>
     {% endif %}
 {% endblock %}

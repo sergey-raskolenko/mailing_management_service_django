@@ -5,5 +5,5 @@ from .models import Message
 
 @admin.register(Message)
 class MessageAdmin(admin.ModelAdmin):
-	fields = ['subject', 'body',]
+	fields = ['pk', 'subject', 'body']
 	ordering = ('pk',)
