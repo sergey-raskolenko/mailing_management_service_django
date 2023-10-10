@@ -44,6 +44,7 @@ INSTALLED_APPS = [
 MY_APPS = [
     'users',
     'main',
+    'app_message',
 ]
 
 INSTALLED_APPS += MY_APPS
