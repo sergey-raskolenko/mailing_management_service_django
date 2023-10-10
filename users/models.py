@@ -57,6 +57,7 @@ class User(AbstractUser):
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'
         db_table = 'users'
+        ordering = ['id']
 
     def __str__(self):
         if self.first_name and self.last_name:

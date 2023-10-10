@@ -14,6 +14,8 @@ class Client(models.Model):
 	class Meta:
 		verbose_name = 'Клиент'
 		verbose_name_plural = 'Клиенты'
+		db_table = 'clients'
+		ordering = ['id']
 
 	def __str__(self):
 		return self.email
