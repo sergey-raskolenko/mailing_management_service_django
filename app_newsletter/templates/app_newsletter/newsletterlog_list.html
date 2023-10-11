@@ -1,0 +1,32 @@
+{% extends 'main/base.html' %}
+
+{% block title %}
+Журнал рассылок
+{% endblock %}
+
+{% block header %}
+Журнал рассылок
+{% endblock %}
+
+{% block content %}
+<table class="table table-striped table-hover caption-top">
+    <thead>
+    <tr>
+        <th scope="col">id</th>
+        <th scope="col">Дата лога</th>
+        <th scope="col">Статус</th>
+        <th scope="col">Ответ сервера</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for object in object_list %}
+    <tr>
+        <td>{{ object.pk }}</td>
+        <td>{{ object.last_try }}</td>
+        <td>{{ object.status }}</td>
+        <td>{{ object.server_answer }}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
