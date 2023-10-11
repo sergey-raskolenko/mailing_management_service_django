@@ -1,65 +1,73 @@
 {% extends 'main/base.html' %}
 
 {% block title %}
-    Главная страница
+Главная страница
 {% endblock %}
 
 {% block header %}
-    MMS
+MMS
 {% endblock %}
 
 {% block content %}
-    <div class="container mt-5">
+<div class="container mt-5">
 
-        <div class="row mb-4">
-            <div class="col-md-4">
-                <div class="card text-center">
-                    <div class="card-header">
-                        <h4 class="card-title">Всего рассылок</h4>
-                    </div>
-                    <div class="card-body">
-                        <p class="card-text"></p>
-                    </div>
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card text-center">
+                <div class="card-header">
+                    <h4 class="card-title">Всего рассылок</h4>
                 </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card text-center">
-                    <div class="card-header">
-                        <h4 class="card-title">Активных рассылок</h4>
-                    </div>
-                    <div class="card-body">
-                        <p class="card-text"></p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card text-center">
-                    <div class="card-header">
-                        <h4 class="card-title">Уникальных клиентов</h4>
-                    </div>
-                    <div class="card-body">
-                        <p class="card-text"></p>
-                    </div>
+                <div class="card-body">
+                    <p class="card-text"></p>
                 </div>
             </div>
         </div>
-
-        <div class="row">
-                <div class="col-lg-4 col-sm-6 mb-4">
-                    <div class="item-card">
-                        <div class="item-thumb">
-                            <img src="{{ post.preview.url }}">
-                        </div>
-                        <div class="item-details">
-                            <h4><a href="#"></a></h4>
-                            <p></p>
-                            <div class="item-bottom-details d-flex justify-content-between">
-                                <div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+        <div class="col-md-4">
+            <div class="card text-center">
+                <div class="card-header">
+                    <h4 class="card-title">Активных рассылок</h4>
                 </div>
+                <div class="card-body">
+                    <p class="card-text"></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-center">
+                <div class="card-header">
+                    <h4 class="card-title">Уникальных клиентов</h4>
+                </div>
+                <div class="card-body">
+                    <p class="card-text"></p>
+                </div>
+            </div>
         </div>
     </div>
+
+    <div class="row">
+        {% load my_tags %}
+        {% for object in object_list %}
+        <div class="p-2 col-3">
+            <div class="card h-100 box-shadow">
+                <div class="card-header">
+                    <h4 class="my-0 font-weight-normal">{{ object.title }}</h4>
+                </div>
+                <div class="card-body">
+                    <img class="col-12 p-2" src="{{ object.image|mediapath }}">
+                    <p class="text-center">{{object.content | slice:100}}</p>
+                </div>
+
+                <div class="card-footer">
+                    <div class="btn-group">
+                        <a href="{% url 'app_blog:detail_blog' object.pk %}" type="button"
+                           class="btn btn-sm btn-outline-secondary">
+                            К деталям
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
 {% endblock %}

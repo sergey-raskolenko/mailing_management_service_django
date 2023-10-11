@@ -1,0 +1,38 @@
+{% extends 'main/base.html' %}
+
+{% load cache %}
+
+{% block title %}
+{{ object.title }}
+{% endblock %}
+
+{% block header %}
+{{ object.title }}
+{% endblock %}
+
+{% block content %}
+{% load my_tags %}
+<div class="card mb-4 box-shadow">
+
+    <div class="media">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <img class="img-fluid" src="{{ object.image|mediapath }}"
+                         data-holder-rendered="true" style="width: 20%; height: 20%">
+                    <div class="col-6">
+                        <ul class="list-unstyled mt-3 mb-4 text-start m-3">
+                            <li>{{ object.content }}</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <p class="card-text">Дата публикации: {{ object.published_date }}</p>
+                <p class="card-text">Просмотров: {{ object.views }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

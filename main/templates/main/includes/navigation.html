@@ -7,6 +7,13 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto top-menu">
             <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="BlogDropdown" role="button"
+                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Блог
+                </a>
+                <div class="dropdown-menu" aria-labelledby="BlogDropdown">
+                    <a class="dropdown-item" href="{% url 'app_blog:list_blog' %}">Статьи</a>                </div>
+            <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="ClientsDropdown" role="button"
                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Клиенты
@@ -56,7 +63,7 @@
         </ul>
         <ul class="navbar-nav ms-auto mb-2 top-menu">
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="blogDropdown" role="button"
+                <a class="nav-link dropdown-toggle" href="#" id="UserDropdown" role="button"
                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="fa-regular fa-user"></i>
                     {% if request.user.is_authenticated %}
@@ -64,7 +71,7 @@
                     {% endif %}
                 </a>
                 {% if request.user.is_authenticated %}
-                    <ul class="dropdown-menu user-dropdown-menu" aria-labelledby="blogDropdown">
+                    <ul class="dropdown-menu user-dropdown-menu" aria-labelledby="UserDropdown">
                         <li>
                             <a class="dropdown-item" href="{% url 'users:profile' %}">
                                 {{ request.user }}
@@ -73,7 +80,7 @@
                         <li><a class="dropdown-item" href="{% url 'users:logout' %}">Выход</a></li>
                     </ul>
                 {% else %}
-                    <ul class="dropdown-menu user-dropdown-menu" aria-labelledby="blogDropdown">
+                    <ul class="dropdown-menu user-dropdown-menu" aria-labelledby="UserDropdown">
                         <li><a class="dropdown-item" href="{% url 'users:register' %}">Регистрация</a></li>
                         <li><a class="dropdown-item" href="{% url 'users:login' %}">Авторизация</a></li>
                     </ul>

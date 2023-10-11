@@ -46,6 +46,7 @@ MY_APPS = [
     'main',
     'app_message',
     'app_client',
+    'app_blog',
 ]
 
 INSTALLED_APPS += MY_APPS
