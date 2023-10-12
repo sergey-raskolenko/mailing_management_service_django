@@ -21,7 +21,9 @@ class Newsletter(models.Model):
 	clients = models.ManyToManyField(Client, verbose_name='клиенты')
 	messages = models.ForeignKey(Message, on_delete=models.CASCADE, verbose_name='сообщение')
 	status = models.CharField(max_length=50, verbose_name='статус отправки')
-	created_by = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Создана')
+	created_by = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='создана')
+
+	is_active = models.BooleanField(default=True, verbose_name='активность')
 
 	class Meta:
 		db_table = 'newsletters'

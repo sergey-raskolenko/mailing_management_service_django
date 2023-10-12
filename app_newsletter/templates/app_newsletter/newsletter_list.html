@@ -9,13 +9,19 @@
 {% block content %}
 <div class="col-12">
     <div class="row">
+        {% if not object_list%}
+        <a class="btn btn-primary" href="{% url 'newsletter:create_newsletter'%}">
+            Создать рассылку
+        </a>
+        {% endif %}
         {% for object in object_list %}
         <div class="col-4">
             <div class="card mb-4 box-shadow">
                 <div class="card-header">
-                    <h4 class="card-title">{{ object.messages.subject }}</h4>
+                    <h4 class="card-title">{{ object }}</h4>
                 </div>
                 <div class="card-body">
+                    <h5 class="card-title">Сообщение:{{ object.messages.subject }}</h5>
                     <div class="card-text">{{ object.mail_time_from }} - {{ object.mail_time_to}}</div>
                 </div>
                 <div class="card-footer">

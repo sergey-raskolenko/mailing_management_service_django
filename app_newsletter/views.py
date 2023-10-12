@@ -5,6 +5,7 @@ from django.views.generic import ListView, CreateView, UpdateView, DeleteView, D
 
 from app_newsletter.forms import NewsletterCreateForm
 from app_newsletter.models import Newsletter, NewsletterLog
+from app_newsletter.services import send_newsletter
 
 
 class NewsletterListView(ListView):
@@ -31,16 +32,20 @@ class NewsletterCreateView(CreateView):
 		newsletter = form.save(commit=False)
 		newsletter.created_by = self.request.user
 		newsletter.status = 'создана'
+		newsletter.save()
+		NewsletterLog.objects.create_log(newsletter, newsletter.status)
 		# log creation of creating
 
 		if form.is_valid():
 			if newsletter.mail_time_from <= now() <= newsletter.mail_time_to:
 				newsletter.mail_status = 'запущена'
-			# Send newsletter function with log creation
+				# Send newsletter function with log creation
+				send_newsletter(newsletter)
 
 			elif newsletter.mail_time_to <= now():
-				newsletter.mail_status = 'завершена'
-		# log creation of ending
+				newsletter.status = 'завершена'
+				# log creation of ending
+				NewsletterLog.objects.create_log(newsletter, newsletter.status)
 
 		newsletter.save()
 		return super().form_valid(form)
@@ -59,16 +64,20 @@ class NewsletterUpdateView(UpdateView):
 	def form_valid(self, form):
 		newsletter = form.save(commit=False)
 		newsletter.status = 'отредактирована'
+		newsletter.save()
 		# log creation of creating
+		NewsletterLog.objects.create_log(newsletter, newsletter.status)
 
 		if form.is_valid():
 			if newsletter.mail_time_from <= now() <= newsletter.mail_time_to:
-				newsletter.mail_status = 'запущена'
-			# Send newsletter function with log creation
+				newsletter.status = 'запущена'
+				# Send newsletter function with log creation
+				send_newsletter(newsletter)
 
 			elif newsletter.mail_time_to <= now():
-				newsletter.mail_status = 'завершена'
-		# log creation of ending
+				newsletter.status = 'завершена'
+				# log creation of ending
+				NewsletterLog.objects.create_log(newsletter, newsletter.status)
 
 		newsletter.save()
 		return super().form_valid(form)
@@ -91,8 +100,9 @@ class NewsletterDeleteView(DeleteView):
 		self.object = self.get_object()
 		success_url = self.get_success_url()
 
-		self.object.mail_status = 'удалена'
+		self.object.status = 'удалена'
 		# log creation of deleting
+		NewsletterLog.objects.create_log(self.object, self.object.status)
 
 		self.object.delete()
 		return HttpResponseRedirect(success_url)
@@ -110,8 +120,11 @@ class NewsletterDetailView(DetailView):
 class NewsletterLogListView(ListView):
 	model = NewsletterLog
 	# Просмотр логов по конкретной рассылке?
-	# def get_queryset(self):
-	# 	return super().get_queryset().filter(newsletter_id=self.kwargs.get('pk'))
+
+	def get_queryset(self):
+		queryset = super().get_queryset().filter(newsletter_id=self.kwargs.get('pk'))
+		queryset = queryset.order_by('-pk')
+		return queryset
 
 	def get_context_data(self, *args, **kwargs):
 		context_data = super().get_context_data(*args, **kwargs)
