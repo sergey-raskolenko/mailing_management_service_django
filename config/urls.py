@@ -26,8 +26,7 @@ urlpatterns = [
     path('users/', include('users.urls', namespace='users')),
     path('client/', include('app_client.urls', namespace='client')),
     path('blog/', include('app_blog.urls', namespace='blog')),
+    path('newsletter/', include('app_newsletter.urls', namespace='newsletter')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
-

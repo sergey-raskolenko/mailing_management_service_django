@@ -19,7 +19,7 @@ class Newsletter(models.Model):
 	mail_time_to = models.DateTimeField(verbose_name='рассылка по', default=now)
 	periodicity = models.CharField(max_length=20, verbose_name='периодичность', choices=PERIODICITY_CHOICES)
 	clients = models.ManyToManyField(Client, verbose_name='клиенты')
-	messages = models.ForeignKey(Message, verbose_name='сообщение')
+	messages = models.ForeignKey(Message, on_delete=models.CASCADE, verbose_name='сообщение')
 	status = models.CharField(max_length=50, verbose_name='статус отправки')
 	created_by = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Создана')
 
@@ -33,12 +33,13 @@ class Newsletter(models.Model):
 
 
 class LogManager(models.Manager):
-	def create_log(self, status, last_try=now(), server_answer=None):
-		log = self.create( status=status, last_try=last_try, server_answer=server_answer)
+	def create_log(self, newsletter, status, last_try=now(), server_answer=None):
+		log = self.create(newsletter=newsletter, status=status, last_try=last_try, server_answer=server_answer)
 		return log
 
 
 class NewsletterLog(models.Model):
+	newsletter = models.ForeignKey(Newsletter, verbose_name='рассылка', on_delete=models.CASCADE)
 	status = models.CharField(max_length=50, verbose_name='статус попытки')
 	last_try = models.DateTimeField(verbose_name='последняя отправка')
 	server_answer = models.SmallIntegerField(verbose_name='ответ сервера', blank=True, null=True)

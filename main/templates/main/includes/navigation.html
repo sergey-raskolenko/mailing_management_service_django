@@ -39,15 +39,11 @@
                     Рассылки
                 </a>
                 <div class="dropdown-menu" aria-labelledby="NewsletterDropdown">
-                    <a class="dropdown-item" href="#">
-                        Список всех рассылок
-                        Список моих рассылок
+                    <a class="dropdown-item" href="{% url 'newsletter:list_newsletter'%}">
+                        Список рассылок
                     </a>
-                    <a class="dropdown-item" href="#">
+                    <a class="dropdown-item" href="{% url 'newsletter:create_newsletter'%}">
                         Создать рассылку
-                    </a>
-                    <a class="dropdown-item" href="#">
-                        Отчёт по проведённым рассылкам
                     </a>
                 </div>
             </li>

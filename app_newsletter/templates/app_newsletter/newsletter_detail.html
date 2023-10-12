@@ -13,13 +13,16 @@
         <div class="col-6">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title">{{ object }}: {{ object.message.subject }}</h4>
+                    <div class="row">
+                        <div class="col-6"><h4 class="card-title">{{ object }}</h4></div>
+                        <div class="col-6"><h4 class="card-title">{{ object.messages.subject }}</h4></div>
+                    </div>
                 </div>
                 <div class="card-body">
                     <table class="table">
                         <tr>
                             <td>Сообщение:</td>
-                            <td>{{object.message.body}}</td>
+                            <td>{{object.messages.body}}</td>
                         </tr>
                         <tr>
                             <td>Время начала рассылки:</td>
@@ -37,16 +40,26 @@
                             <td>Статус:</td>
                             <td>{{object.status}}</td>
                         </tr>
+                    </table>
+
+                    <table class="table">
                         <tr>
                             <td>Клиенты:</td>
+                            <td></td>
                             {% for client in object.clients.all %}
                         <tr>
-                            <td>{{client.first_name}} {{client.last_name}}</td>
+                            <td></td>
                             <td>{{client.email}}</td>
                         <tr>
                             {% endfor %}
                         </tr>
                     </table>
+                </div>
+                <div class="card-footer">
+                    <div class="btn-group">
+                        <a href="{% url 'newsletter:list_newsletterlogs' object.pk %}"
+                           class="btn btn-sm btn-secondary">Отчёт по рассылке</a>
+                    </div>
                 </div>
             </div>
         </div>
