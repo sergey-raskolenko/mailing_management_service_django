@@ -33,6 +33,17 @@
                         <a href="{% url 'newsletter:delete_newsletter' object.pk %}"
                            class="btn btn-sm btn-danger">Удалить</a>
                     </div>
+                    <div class="btn-group m-1">
+                        {% if user.is_staff %}
+                            {% if object.is_active %}
+                            <a href="{% url 'newsletter:toggle_is_active' object.pk %}"
+                               class="btn btn-sm btn-warning">Deactivate</a>
+                            {% else %}
+                            <a href="{% url 'newsletter:toggle_is_active' object.pk %}"
+                               class="btn btn-sm btn-success">Activate</a>
+                            {% endif %}
+                        {% endif %}
+                    </div>
                 </div>
             </div>
         </div>

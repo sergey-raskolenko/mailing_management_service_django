@@ -111,7 +111,6 @@ def generate_password(request):
 
 
 def toggle_staff(*args, **kwargs):
-	# print(*args, **kwargs)
 	print(kwargs.get('pk'))
 	user = get_object_or_404(User, pk=kwargs.get('pk'))
 	if user.is_staff:

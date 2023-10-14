@@ -1,4 +1,5 @@
 from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.utils.timezone import now
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
@@ -33,12 +34,12 @@ class NewsletterCreateView(CreateView):
 		newsletter.created_by = self.request.user
 		newsletter.status = 'создана'
 		newsletter.save()
-		NewsletterLog.objects.create_log(newsletter, newsletter.status)
 		# log creation of creating
+		NewsletterLog.objects.create_log(newsletter, newsletter.status)
 
-		if form.is_valid():
+		if newsletter.is_active:
 			if newsletter.mail_time_from <= now() <= newsletter.mail_time_to:
-				newsletter.mail_status = 'запущена'
+				newsletter.status = 'запущена'
 				# Send newsletter function with log creation
 				send_newsletter(newsletter)
 
@@ -68,7 +69,7 @@ class NewsletterUpdateView(UpdateView):
 		# log creation of creating
 		NewsletterLog.objects.create_log(newsletter, newsletter.status)
 
-		if form.is_valid():
+		if newsletter.is_active:
 			if newsletter.mail_time_from <= now() <= newsletter.mail_time_to:
 				newsletter.status = 'запущена'
 				# Send newsletter function with log creation
@@ -115,6 +116,18 @@ class NewsletterDetailView(DetailView):
 		context_data = super().get_context_data(**kwargs)
 		context_data['title'] = f'{self.object}'
 		return context_data
+
+
+def toggle_is_active(*args, **kwargs):
+	print(kwargs.get('pk'))
+	newsletter = get_object_or_404(Newsletter, pk=kwargs.get('pk'))
+	if newsletter.is_active:
+		newsletter.is_active = False
+	else:
+		newsletter.is_active = True
+	newsletter.save()
+
+	return redirect(reverse_lazy('newsletter:list_newsletter'))
 
 
 class NewsletterLogListView(ListView):
