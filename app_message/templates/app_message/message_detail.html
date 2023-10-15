@@ -25,8 +25,13 @@
     <div class="card-footer">
         <p class="card-text">Создатель: {{ object.created_by|default:"Неизвестен" }}</p>
         <div class="btn-group">
-            <a href="{% url 'message:update_message' object.pk %}"
-               class="btn btn-sm btn-secondary">Редактировать</a>
+            {% if user.is_staff %}
+                {% if user.is_superuser %}
+                <a href="{% url 'message:update_message' object.pk %}"
+                class="btn btn-sm btn-secondary">Редактировать</a>
+                {% else %}
+                {% endif %}
+            {% endif %}
             <a href="{% url 'message:delete_message' object.pk %}"
                class="btn btn-sm btn-danger">Удалить</a>
         </div>

@@ -25,20 +25,31 @@
                     <img class="col-12 p-2" src="{{ object.avatar|mediapath }}">
                     <p class="text-center">Имя: {{object.first_name}}</p>
                     <p class="text-center">Фамилия: {{object.last_name}}</p>
+                     <ul>
+                        {% if user.is_superuser %}
+                        <li class="p-2">Менеджерство:
+                        {% if object.is_staff %}
+                            <a href="{% url 'users:toggle_staff' object.pk %}"
+                            class="btn btn-sm btn-warning p-2">Deactivate</a>
+                        {% else %}
+                            <a href="{% url 'users:toggle_staff' object.pk %}"
+                               class="btn btn-sm btn-success">Activate</a>
+                        </li>
+                        {% endif %}
+                        {% endif %}
+                    </ul>
                 </div>
                 <div class="card-footer">
                     <div class="btn-group">
+                        {% if object.is_active %}
+                        <a href="{% url 'users:toggle_activity' object.pk %}"
+                           class="btn btn-sm btn-warning">Заблокировать</a>
+                        {% else %}
+                        <a href="{% url 'users:toggle_activity' object.pk %}"
+                           class="btn btn-sm btn-success">Разблокировать</a>
+                        {% endif %}
                         <a href="{% url 'users:delete_user' object.pk %}"
                            class="btn btn-sm btn-danger">Удалить</a>
-                        {% if user.is_superuser %}
-                            {% if object.is_staff %}
-                            <a href="{% url 'users:toggle_staff' object.pk %}"
-                               class="btn btn-sm btn-outline-warning">Deactivate</a>
-                            {% else %}
-                            <a href="{% url 'users:toggle_staff' object.pk %}"
-                               class="btn btn-sm btn-outline-success">Activate</a>
-                            {% endif %}
-                        {% endif %}
                     </div>
                 </div>
             </div>

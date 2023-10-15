@@ -1,4 +1,4 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
@@ -15,15 +15,26 @@ class NewsletterListView(LoginRequiredMixin, ListView):
 
 	def get_context_data(self, **kwargs):
 		context_data = super().get_context_data(**kwargs)
-		context_data['object_list'] = Newsletter.objects.filter(created_by=self.request.user)
 		context_data['title'] = 'Список рассылок'
+		if self.request.user.is_staff:
+			context_data['object_list'] = Newsletter.objects.all()
+		else:
+			context_data['object_list'] = Newsletter.objects.filter(created_by=self.request.user)
 		return context_data
 
 
-class NewsletterCreateView(LoginRequiredMixin, CreateView):
+class NewsletterCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
 	model = Newsletter
 	form_class = NewsletterCreateForm
 	success_url = reverse_lazy('newsletter:list_newsletter')
+
+	def test_func(self):
+		if self.get_object().created_by == self.request.user:
+			return True
+		elif self.request.user.is_superuser:
+			return True
+		elif self.request.user.is_staff:
+			return False
 
 	def get_context_data(self, **kwargs):
 		context_data = super().get_context_data(**kwargs)
@@ -52,10 +63,18 @@ class NewsletterCreateView(LoginRequiredMixin, CreateView):
 		return super().form_valid(form)
 
 
-class NewsletterUpdateView(LoginRequiredMixin, UpdateView):
+class NewsletterUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 	model = Newsletter
 	form_class = NewsletterCreateForm
 	success_url = reverse_lazy('newsletter:list_newsletter')
+
+	def test_func(self):
+		if self.get_object().created_by == self.request.user:
+			return True
+		elif self.request.user.is_superuser:
+			return True
+		elif self.request.user.is_staff:
+			return False
 
 	def get_context_data(self, **kwargs):
 		context_data = super().get_context_data(**kwargs)
@@ -94,10 +113,6 @@ class NewsletterDeleteView(LoginRequiredMixin, DeleteView):
 		return context_data
 
 	def delete(self, request, *args, **kwargs):
-		"""
-		Call the delete() method on the fetched object and then redirect to the
-		success URL.
-		"""
 		self.object = self.get_object()
 		success_url = self.get_success_url()
 

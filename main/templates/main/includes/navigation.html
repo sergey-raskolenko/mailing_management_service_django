@@ -13,7 +13,7 @@
                 </a>
                 <div class="dropdown-menu" aria-labelledby="BlogDropdown">
                     <a class="dropdown-item" href="{% url 'app_blog:list_blog' %}">Статьи</a></div>
-            {% if user.is_authenticated %}
+                {% if user.is_authenticated %}
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="ClientsDropdown" role="button"
                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -43,11 +43,18 @@
                     <a class="dropdown-item" href="{% url 'newsletter:list_newsletter'%}">
                         Список рассылок
                     </a>
-                    <a class="dropdown-item" href="{% url 'newsletter:create_newsletter'%}">
-                        Создать рассылку
-                    </a>
+
+                    {% if user.is_staff %}
+                        {% if user.is_superuser %}
+                        <a class="dropdown-item" href="{% url 'newsletter:create_newsletter'%}">
+                            Создать рассылку
+                        </a>
+                        {% else %}
+                        {% endif %}
+                    {% endif %}
                 </div>
             </li>
+            {% if user.is_staff %}
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="ManagersDropdown" role="button"
                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -62,6 +69,7 @@
                     </a>
                 </div>
             </li>
+            {% endif %}
             {% endif %}
         </ul>
         <ul class="navbar-nav ms-auto mb-2 top-menu">

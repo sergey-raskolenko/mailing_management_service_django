@@ -1,4 +1,4 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView, ListView, DeleteView, DetailView
 
@@ -24,10 +24,18 @@ class MessageCreateView(LoginRequiredMixin, CreateView):
 		return context_data
 
 
-class MessageUpdateView(LoginRequiredMixin, UpdateView):
+class MessageUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 	model = Message
 	form_class = MessageForm
 	success_url = reverse_lazy('message:list_message')
+
+	def test_func(self):
+		if self.get_object().created_by == self.request.user:
+			return True
+		elif self.request.user.is_superuser:
+			return True
+		elif self.request.user.is_staff:
+			return False
 
 	def get_context_data(self, **kwargs):
 		context_data = super().get_context_data(**kwargs)
@@ -41,7 +49,10 @@ class MessageListView(LoginRequiredMixin, ListView):
 	def get_context_data(self, **kwargs):
 		context_data = super().get_context_data(**kwargs)
 		context_data['title'] = 'Все сообщения'
-		context_data['object_list'] = Message.objects.filter(created_by=self.request.user)
+		if self.request.user.is_staff:
+			context_data['object_list'] = Message.objects.all()
+		else:
+			context_data['object_list'] = Message.objects.filter(created_by=self.request.user)
 		return context_data
 
 

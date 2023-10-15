@@ -1,6 +1,6 @@
 import secrets
 
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.views import LoginView as BaseLoginView
 from django.contrib.auth.views import LogoutView as BaseLogoutView
 from django.core.mail import send_mail
@@ -76,8 +76,10 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
 		return self.request.user
 
 
-class UserListView(LoginRequiredMixin, ListView):
+class UserListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
 	model = User
+	def test_func(self):
+		return self.request.user.is_staff
 
 	def get_context_data(self, **kwargs):
 		context_data = super().get_context_data(**kwargs)
@@ -85,9 +87,12 @@ class UserListView(LoginRequiredMixin, ListView):
 		return context_data
 
 
-class UserDeleteView(LoginRequiredMixin, DeleteView):
+class UserDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 	model = User
 	success_url = reverse_lazy('users:list_user')
+
+	def test_func(self):
+		return self.request.user.is_staff
 
 	def get_context_data(self, **kwargs):
 		context_data = super().get_context_data(**kwargs)
@@ -112,12 +117,23 @@ def generate_password(request):
 
 
 def toggle_staff(*args, **kwargs):
-	print(kwargs.get('pk'))
 	user = get_object_or_404(User, pk=kwargs.get('pk'))
 	if user.is_staff:
 		user.is_staff = False
 	else:
+		user.is_active = True
 		user.is_staff = True
+
+	user.save()
+
+	return redirect(reverse_lazy('users:list_user'))
+
+def toggle_activity(*args, **kwargs):
+	user = get_object_or_404(User, pk=kwargs.get('pk'))
+	if user.is_active:
+		user.is_active = False
+	else:
+		user.is_active = True
 
 	user.save()
 

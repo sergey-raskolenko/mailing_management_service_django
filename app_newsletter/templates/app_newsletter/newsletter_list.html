@@ -10,38 +10,49 @@
 <div class="col-12">
     <div class="row">
         {% if not object_list%}
+        {% if user.is_staff %}
+        {% if user.is_superuser %}
         <a class="btn btn-primary" href="{% url 'newsletter:create_newsletter'%}">
             Создать рассылку
         </a>
+        {% else %}
+        {% endif %}
+        {% endif %}
         {% endif %}
         {% for object in object_list %}
         <div class="col-4">
             <div class="card mb-4 box-shadow">
                 <div class="card-header">
-                    <h4 class="card-title">{{ object }}</h4>
+                    <h3 class="card-title">{{ object }}</h3>
                 </div>
                 <div class="card-body">
-                    <h5 class="card-title">Сообщение:{{ object.messages.subject }}</h5>
-                    <div class="card-text">{{ object.mail_time_from }} - {{ object.mail_time_to}}</div>
+                    <h6 class="card-title">Тема: {{ object.messages.subject }}</h6>
+                    <div class="card-text">Начало рассылки: {{ object.mail_time_from }}</div>
+                    <div class="card-text">Конец рассылки: {{ object.mail_time_to}}</div>
                 </div>
                 <div class="card-footer">
                     <div class="btn-group">
                         <a href="{% url 'newsletter:detail_newsletter' object.pk %}"
                            class="btn btn-sm btn-secondary">Подробнее</a>
+                        {% if user.is_staff %}
+                        {% if user.is_superuser %}
                         <a href="{% url 'newsletter:update_newsletter' object.pk %}"
                            class="btn btn-sm btn-secondary">Редактировать</a>
+                        {% else %}
+                        {% endif %}
+                        {% endif %}
                         <a href="{% url 'newsletter:delete_newsletter' object.pk %}"
                            class="btn btn-sm btn-danger">Удалить</a>
                     </div>
                     <div class="btn-group m-1">
                         {% if user.is_staff %}
-                            {% if object.is_active %}
-                            <a href="{% url 'newsletter:toggle_is_active' object.pk %}"
-                               class="btn btn-sm btn-warning">Deactivate</a>
-                            {% else %}
-                            <a href="{% url 'newsletter:toggle_is_active' object.pk %}"
-                               class="btn btn-sm btn-success">Activate</a>
-                            {% endif %}
+                        {% if object.is_active %}
+                        <a href="{% url 'newsletter:toggle_is_active' object.pk %}"
+                           class="btn btn-sm btn-warning">Deactivate</a>
+                        {% else %}
+                        <a href="{% url 'newsletter:toggle_is_active' object.pk %}"
+                           class="btn btn-sm btn-success">Activate</a>
+                        {% endif %}
                         {% endif %}
                     </div>
                 </div>
