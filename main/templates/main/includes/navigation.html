@@ -43,14 +43,11 @@
                     <a class="dropdown-item" href="{% url 'newsletter:list_newsletter'%}">
                         Список рассылок
                     </a>
-
-                    {% if user.is_staff %}
-                        {% if user.is_superuser %}
-                        <a class="dropdown-item" href="{% url 'newsletter:create_newsletter'%}">
-                            Создать рассылку
-                        </a>
-                        {% else %}
-                        {% endif %}
+                    {% if user.is_staff and not user.is_superuser %}
+                    {% else %}
+                    <a class="dropdown-item" href="{% url 'newsletter:create_newsletter'%}">
+                        Создать рассылку
+                    </a>
                     {% endif %}
                 </div>
             </li>
@@ -64,9 +61,12 @@
                     <a class="dropdown-item" href="{% url 'users:list_user'%}">
                         Список пользователей сервиса
                     </a>
+                    {% if user.is_staff and not user.is_superuser %}
+                    {% else %}
                     <a class="dropdown-item" href="{% url 'users:register' %}">
                         Создать пользователя
                     </a>
+                    {% endif %}
                 </div>
             </li>
             {% endif %}

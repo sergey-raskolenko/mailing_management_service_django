@@ -30,12 +30,9 @@ class MessageUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 	success_url = reverse_lazy('message:list_message')
 
 	def test_func(self):
-		if self.get_object().created_by == self.request.user:
-			return True
-		elif self.request.user.is_superuser:
-			return True
-		elif self.request.user.is_staff:
+		if self.request.user.is_staff and not self.request.user.is_superuser:
 			return False
+		return True
 
 	def get_context_data(self, **kwargs):
 		context_data = super().get_context_data(**kwargs)

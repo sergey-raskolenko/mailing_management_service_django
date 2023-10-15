@@ -1,5 +1,6 @@
 import secrets
 
+from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.views import LoginView as BaseLoginView
 from django.contrib.auth.views import LogoutView as BaseLogoutView
@@ -23,11 +24,16 @@ class LogoutView(BaseLogoutView):
 	pass
 
 
-class RegisterView(CreateView):
+class RegisterView(UserPassesTestMixin, CreateView):
 	model = User
 	form_class = UserRegisterForm
 	success_url = reverse_lazy('users:login')
 	template_name = 'users/register.html'
+
+	def test_func(self):
+		if self.request.user.is_staff and not self.request.user.is_superuser:
+			return False
+		return True
 
 	def form_valid(self, form):
 		user = form.save(commit=False)
@@ -116,6 +122,7 @@ def generate_password(request):
 	return redirect(reverse('main:index'))
 
 
+@user_passes_test(lambda u: u.is_superuser)
 def toggle_staff(*args, **kwargs):
 	user = get_object_or_404(User, pk=kwargs.get('pk'))
 	if user.is_staff:
@@ -127,6 +134,7 @@ def toggle_staff(*args, **kwargs):
 	user.save()
 
 	return redirect(reverse_lazy('users:list_user'))
+
 
 def toggle_activity(*args, **kwargs):
 	user = get_object_or_404(User, pk=kwargs.get('pk'))

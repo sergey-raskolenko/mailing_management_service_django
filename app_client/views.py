@@ -41,7 +41,10 @@ class ClientListView(LoginRequiredMixin, ListView):
 	def get_context_data(self, **kwargs):
 		context_data = super().get_context_data(**kwargs)
 		context_data['title'] = 'Все мои клиенты'
-		context_data['object_list'] = Client.objects.filter(created_by=self.request.user)
+		if self.request.user.is_staff:
+			context_data['object_list'] = Client.objects.all()
+		else:
+			context_data['object_list'] = Client.objects.filter(created_by=self.request.user)
 		return context_data
 
 
