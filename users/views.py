@@ -1,5 +1,4 @@
 import secrets
-
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.views import LoginView as BaseLoginView
@@ -9,8 +8,8 @@ from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse_lazy, reverse
 from django.views import View
 from django.views.generic import CreateView, UpdateView, TemplateView, DeleteView, ListView
-
 from config import settings
+from main.services import cache_object_list
 from users.forms import UserForm, UserRegisterForm, UserLoginForm
 from users.models import User
 
@@ -90,6 +89,8 @@ class UserListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
 	def get_context_data(self, **kwargs):
 		context_data = super().get_context_data(**kwargs)
 		context_data['title'] = 'Список пользователей'
+		object_list = cache_object_list(User)
+		context_data['object_list'] = object_list
 		return context_data
 
 

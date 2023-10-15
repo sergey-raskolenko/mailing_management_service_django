@@ -8,6 +8,7 @@ from django.views.generic import ListView, CreateView, UpdateView, DeleteView, D
 from app_newsletter.forms import NewsletterCreateForm
 from app_newsletter.models import Newsletter, NewsletterLog
 from app_newsletter.services import send_newsletter
+from main.services import cache_object_list
 
 
 class NewsletterListView(LoginRequiredMixin, ListView):
@@ -16,10 +17,11 @@ class NewsletterListView(LoginRequiredMixin, ListView):
 	def get_context_data(self, **kwargs):
 		context_data = super().get_context_data(**kwargs)
 		context_data['title'] = 'Список рассылок'
+		object_list = cache_object_list(Newsletter)
 		if self.request.user.is_staff:
-			context_data['object_list'] = Newsletter.objects.all()
+			context_data['object_list'] = object_list
 		else:
-			context_data['object_list'] = Newsletter.objects.filter(created_by=self.request.user)
+			context_data['object_list'] = object_list.filter(created_by=self.request.user)
 		return context_data
 
 

@@ -4,6 +4,7 @@ from django.views.generic import CreateView, UpdateView, ListView, DeleteView, D
 
 from app_message.forms import MessageForm
 from app_message.models import Message
+from main.services import cache_object_list
 
 
 class MessageCreateView(LoginRequiredMixin, CreateView):
@@ -46,10 +47,11 @@ class MessageListView(LoginRequiredMixin, ListView):
 	def get_context_data(self, **kwargs):
 		context_data = super().get_context_data(**kwargs)
 		context_data['title'] = 'Все сообщения'
+		object_list = cache_object_list(Message)
 		if self.request.user.is_staff:
-			context_data['object_list'] = Message.objects.all()
+			context_data['object_list'] = object_list
 		else:
-			context_data['object_list'] = Message.objects.filter(created_by=self.request.user)
+			context_data['object_list'] = object_list.filter(created_by=self.request.user)
 		return context_data
 
 

@@ -1,5 +1,6 @@
 from django.views.generic import ListView, DetailView
 from app_blog.models import Blog
+from main.services import cache_object_list
 
 
 class BlogListView(ListView):
@@ -8,6 +9,7 @@ class BlogListView(ListView):
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
         context_data['title'] = 'Список статей'
+        context_data['object_list'] = cache_object_list(Blog)
         return context_data
 
 
