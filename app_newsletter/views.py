@@ -105,7 +105,7 @@ class NewsletterDeleteView(DeleteView):
 		# log creation of deleting
 		NewsletterLog.objects.create_log(self.object, self.object.status)
 
-		self.object.delete()
+		self.object.is_active = False
 		return HttpResponseRedirect(success_url)
 
 
