@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
@@ -9,7 +10,7 @@ from app_newsletter.models import Newsletter, NewsletterLog
 from app_newsletter.services import send_newsletter
 
 
-class NewsletterListView(ListView):
+class NewsletterListView(LoginRequiredMixin, ListView):
 	model = Newsletter
 
 	def get_context_data(self, **kwargs):
@@ -19,7 +20,7 @@ class NewsletterListView(ListView):
 		return context_data
 
 
-class NewsletterCreateView(CreateView):
+class NewsletterCreateView(LoginRequiredMixin, CreateView):
 	model = Newsletter
 	form_class = NewsletterCreateForm
 	success_url = reverse_lazy('newsletter:list_newsletter')
@@ -37,22 +38,21 @@ class NewsletterCreateView(CreateView):
 		# log creation of creating
 		NewsletterLog.objects.create_log(newsletter, newsletter.status)
 
-		if newsletter.is_active:
-			if newsletter.mail_time_from <= now() <= newsletter.mail_time_to:
-				newsletter.status = 'запущена'
-				# Send newsletter function with log creation
-				send_newsletter(newsletter)
+		if newsletter.mail_time_from <= now() <= newsletter.mail_time_to:
+			newsletter.status = 'запущена'
+			# Send newsletter function with log creation
+			send_newsletter(newsletter)
 
-			elif newsletter.mail_time_to <= now():
-				newsletter.status = 'завершена'
-				# log creation of ending
-				NewsletterLog.objects.create_log(newsletter, newsletter.status)
+		elif newsletter.mail_time_to <= now():
+			newsletter.status = 'завершена'
+			# log creation of ending
+			NewsletterLog.objects.create_log(newsletter, newsletter.status)
 
 		newsletter.save()
 		return super().form_valid(form)
 
 
-class NewsletterUpdateView(UpdateView):
+class NewsletterUpdateView(LoginRequiredMixin, UpdateView):
 	model = Newsletter
 	form_class = NewsletterCreateForm
 	success_url = reverse_lazy('newsletter:list_newsletter')
@@ -84,7 +84,7 @@ class NewsletterUpdateView(UpdateView):
 		return super().form_valid(form)
 
 
-class NewsletterDeleteView(DeleteView):
+class NewsletterDeleteView(LoginRequiredMixin, DeleteView):
 	model = Newsletter
 	success_url = reverse_lazy('newsletter:list_newsletter')
 
@@ -109,7 +109,7 @@ class NewsletterDeleteView(DeleteView):
 		return HttpResponseRedirect(success_url)
 
 
-class NewsletterDetailView(DetailView):
+class NewsletterDetailView(LoginRequiredMixin, DetailView):
 	model = Newsletter
 
 	def get_context_data(self, **kwargs):
@@ -130,7 +130,7 @@ def toggle_is_active(*args, **kwargs):
 	return redirect(reverse_lazy('newsletter:list_newsletter'))
 
 
-class NewsletterLogListView(ListView):
+class NewsletterLogListView(LoginRequiredMixin, ListView):
 	model = NewsletterLog
 	# Просмотр логов по конкретной рассылке?
 

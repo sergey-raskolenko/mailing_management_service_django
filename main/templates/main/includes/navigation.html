@@ -13,6 +13,7 @@
                 </a>
                 <div class="dropdown-menu" aria-labelledby="BlogDropdown">
                     <a class="dropdown-item" href="{% url 'app_blog:list_blog' %}">Статьи</a></div>
+            {% if user.is_authenticated %}
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="ClientsDropdown" role="button"
                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -61,6 +62,7 @@
                     </a>
                 </div>
             </li>
+            {% endif %}
         </ul>
         <ul class="navbar-nav ms-auto mb-2 top-menu">
             <li class="nav-item dropdown">

@@ -1,5 +1,6 @@
 import secrets
 
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView as BaseLoginView
 from django.contrib.auth.views import LogoutView as BaseLogoutView
 from django.core.mail import send_mail
@@ -66,7 +67,7 @@ class UserConfirmEmailView(View):
 		return redirect('users:login')
 
 
-class UserUpdateView(UpdateView):
+class UserUpdateView(LoginRequiredMixin, UpdateView):
 	model = User
 	form_class = UserForm
 	success_url = reverse_lazy('users:profile')
@@ -75,7 +76,7 @@ class UserUpdateView(UpdateView):
 		return self.request.user
 
 
-class UserListView(ListView):
+class UserListView(LoginRequiredMixin, ListView):
 	model = User
 
 	def get_context_data(self, **kwargs):
@@ -84,7 +85,7 @@ class UserListView(ListView):
 		return context_data
 
 
-class UserDeleteView(DeleteView):
+class UserDeleteView(LoginRequiredMixin, DeleteView):
 	model = User
 	success_url = reverse_lazy('users:list_user')
 

@@ -1,4 +1,4 @@
-
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.views.generic import DetailView, ListView, DeleteView, UpdateView, CreateView
 
@@ -6,15 +6,15 @@ from app_client.forms import ClientCreateForm
 from app_client.models import Client
 
 
-class ClientCreateView(CreateView):
+class ClientCreateView(LoginRequiredMixin, CreateView):
 	model = Client
 	form_class = ClientCreateForm
 	success_url = reverse_lazy('client:list_client')
 
 	def form_valid(self, form):
-		message = form.save(commit=False)
-		message.created_by = self.request.user
-		message.save()
+		client = form.save(commit=False)
+		client.created_by = self.request.user
+		client.save()
 
 		return super().form_valid(form)
 
@@ -24,7 +24,7 @@ class ClientCreateView(CreateView):
 		return context_data
 
 
-class ClientUpdateView(UpdateView):
+class ClientUpdateView(LoginRequiredMixin, UpdateView):
 	model = Client
 	form_class = ClientCreateForm
 	success_url = reverse_lazy('client:list_client')
@@ -35,25 +35,26 @@ class ClientUpdateView(UpdateView):
 		return context_data
 
 
-class ClientListView(ListView):
+class ClientListView(LoginRequiredMixin, ListView):
 	model = Client
 
 	def get_context_data(self, **kwargs):
 		context_data = super().get_context_data(**kwargs)
-		context_data['title'] = 'Все клиенты'
+		context_data['title'] = 'Все мои клиенты'
+		context_data['object_list'] = Client.objects.filter(created_by=self.request.user)
 		return context_data
 
 
-class ClientDetailView(DetailView):
+class ClientDetailView(LoginRequiredMixin, DetailView):
 	model = Client
 
 	def get_context_data(self, **kwargs):
 		context_data = super().get_context_data(**kwargs)
-		context_data['title'] = 'Просмотр клиента'
+		context_data['title'] = 'Просмотр моего клиента'
 		return context_data
 
 
-class ClientDeleteView(DeleteView):
+class ClientDeleteView(LoginRequiredMixin, DeleteView):
 	model = Client
 	success_url = reverse_lazy('client:list_client')
 
