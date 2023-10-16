@@ -1,7 +1,5 @@
 from django.db import models
 
-from django.db import models
-
 from users.models import User
 
 
@@ -21,4 +19,3 @@ class Message(models.Model):
 
 	def __str__(self):
 		return self.subject
-

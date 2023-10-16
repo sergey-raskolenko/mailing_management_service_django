@@ -4,7 +4,6 @@ from django.views.generic import DetailView, ListView, DeleteView, UpdateView, C
 
 from app_client.forms import ClientCreateForm
 from app_client.models import Client
-from main.services import cache_object_list
 
 
 class ClientCreateView(LoginRequiredMixin, CreateView):

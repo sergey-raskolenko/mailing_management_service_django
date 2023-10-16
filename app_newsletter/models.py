@@ -1,5 +1,4 @@
 from django.db import models
-from django.urls import reverse
 from django.utils.timezone import now
 
 from app_client.models import Client

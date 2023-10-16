@@ -9,7 +9,6 @@ from django.urls import reverse_lazy, reverse
 from django.views import View
 from django.views.generic import CreateView, UpdateView, TemplateView, DeleteView, ListView
 from config import settings
-from main.services import cache_object_list
 from users.forms import UserForm, UserRegisterForm, UserLoginForm
 from users.models import User
 
@@ -54,7 +53,7 @@ class RegisterView(UserPassesTestMixin, CreateView):
 		send_mail(
 			subject='Подтверждение почты',
 			message=f'Для подтверждения регистрации перейдите по ссылке: '
-					f'http://localhost:8000/{activate_url}',
+			f'http://localhost:8000/{activate_url}',
 			from_email=settings.EMAIL_HOST_USER,
 			recipient_list=[user.email],
 			fail_silently=False
@@ -105,6 +104,7 @@ class UserListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
 	Представление для отображения списка пользователей авторизованному пользователю с правами стаффа
 	"""
 	model = User
+
 	def test_func(self):
 		return self.request.user.is_staff
 

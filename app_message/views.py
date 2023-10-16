@@ -4,7 +4,6 @@ from django.views.generic import CreateView, UpdateView, ListView, DeleteView, D
 
 from app_message.forms import MessageForm
 from app_message.models import Message
-from main.services import cache_object_list
 
 
 class MessageCreateView(LoginRequiredMixin, CreateView):
@@ -87,4 +86,3 @@ class MessageDeleteView(LoginRequiredMixin, DeleteView):
 		context_data = super().get_context_data(**kwargs)
 		context_data['title'] = 'Удаление сообщения'
 		return context_data
-
