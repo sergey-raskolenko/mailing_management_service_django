@@ -8,6 +8,9 @@ from config import settings
 
 
 def send_newsletter(newsletter: Newsletter):
+	"""
+	Функция для отправки сообщения из рассылки всем клиентам из рассылки с созданием логов действий
+	"""
 	try:
 		send_mail(
 			newsletter.messages.subject,
@@ -24,6 +27,10 @@ def send_newsletter(newsletter: Newsletter):
 
 
 def manage_schedule(scheduler):
+	"""
+	Функция для добавления рассылки в очередь задач, если она не завершена.
+	Постановка рассылки на паузу в очереди задач, если она не активна
+	"""
 	newsletters = Newsletter.objects.all()
 	if newsletters:
 		for newsletter in newsletters:
@@ -41,6 +48,9 @@ def manage_schedule(scheduler):
 
 
 def create_newsletter_task(scheduler, newsletter: Newsletter):
+	"""
+	Создание задачи для рассылки исходя из ее периодичности
+	"""
 	if newsletter.periodicity == 'D':
 		scheduler.add_job(
 			send_newsletter,
@@ -74,6 +84,9 @@ def create_newsletter_task(scheduler, newsletter: Newsletter):
 
 
 def check_task_for_send(newsletter: Newsletter) -> bool:
+	"""
+	Проверка активности рассылки, и верности времени ее начала
+	"""
 	if newsletter.is_active:
 		if newsletter.mail_time_from <= now():
 			if now() <= newsletter.mail_time_to:

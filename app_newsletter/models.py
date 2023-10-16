@@ -10,6 +10,9 @@ NULLABLE = {'blank': True, 'null': True}
 
 
 class Newsletter(models.Model):
+	"""
+	Модель для описания рассылки
+	"""
 	PERIODICITY_CHOICES = [
 		('D', 'Раз в день'),
 		('W', 'Раз в неделю'),
@@ -35,12 +38,18 @@ class Newsletter(models.Model):
 
 
 class LogManager(models.Manager):
+	"""
+	Модель менеджера для создания объекта с определенными атрибутами
+	"""
 	def create_log(self, newsletter, status, last_try=now(), server_answer=None):
 		log = self.create(newsletter=newsletter, status=status, last_try=last_try, server_answer=server_answer)
 		return log
 
 
 class NewsletterLog(models.Model):
+	"""
+	Модель для описания лога рассылки
+	"""
 	newsletter = models.ForeignKey(Newsletter, verbose_name='рассылка', on_delete=models.CASCADE)
 	status = models.CharField(max_length=50, verbose_name='статус попытки')
 	last_try = models.DateTimeField(verbose_name='последняя отправка')

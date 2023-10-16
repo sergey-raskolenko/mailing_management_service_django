@@ -4,11 +4,18 @@ from .models import Client
 
 
 class ClientCreateForm(forms.ModelForm):
+	"""
+	Форма создания нового клиента для рассылки сообщений
+	"""
+
 	class Meta:
 		model = Client
 		fields = ['email', 'name', 'surname', 'middle_name', 'comment']
 
 	def __init__(self, *args, **kwargs):
+		"""
+		Инициализатор формы, применяет к полям CSS стили и добавляет плейсхолдеры
+		"""
 		self.user = kwargs.pop('user', None)
 		super().__init__(*args, **kwargs)
 

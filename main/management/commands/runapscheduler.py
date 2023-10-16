@@ -6,6 +6,9 @@ from app_newsletter.services import manage_schedule
 
 
 class Command(BaseCommand):
+	"""
+	Консольная команда для запуска работы очереди задач
+	"""
 	help = "Runs APScheduler."
 
 	def handle(self, *args, **options):

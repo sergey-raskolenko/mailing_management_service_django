@@ -4,6 +4,9 @@ from .models import Newsletter
 
 
 class NewsletterCreateForm(forms.ModelForm):
+	"""
+	Форма создания нового рассылки
+	"""
 
 	class Meta:
 		model = Newsletter

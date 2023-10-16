@@ -4,6 +4,9 @@ from users.models import NULLABLE
 
 
 class Blog(models.Model):
+	"""
+	Модель для описания поста блога
+	"""
 	title = models.CharField(max_length=100, verbose_name='заголовок')
 	content = models.TextField(verbose_name='cодержание')
 	image = models.ImageField(verbose_name='изображение', upload_to='blog/', **NULLABLE)

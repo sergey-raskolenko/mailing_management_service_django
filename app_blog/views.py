@@ -4,6 +4,9 @@ from main.services import cache_object_list
 
 
 class BlogListView(ListView):
+    """
+    Представление для отображения списка постов
+    """
     model = Blog
 
     def get_context_data(self, **kwargs):
@@ -14,6 +17,9 @@ class BlogListView(ListView):
 
 
 class BlogDetailView(DetailView):
+    """
+    Представление для детального отображения поста
+    """
     model = Blog
 
     def get_object(self, queryset=None):

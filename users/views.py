@@ -15,15 +15,25 @@ from users.models import User
 
 
 class LoginView(BaseLoginView):
+	"""
+	Представление для формы входа и обработки действия входа
+	"""
 	form_class = UserLoginForm
 	template_name = 'users/login.html'
 
 
 class LogoutView(BaseLogoutView):
+	"""
+	Представление для выхода пользователем из системы
+	"""
 	pass
 
 
 class RegisterView(UserPassesTestMixin, CreateView):
+	"""
+	Представление для создания нового пользователя (кроме стаффа)
+	При создании отправляется верификационное письмо на почту, для подтверждения регистрации
+	"""
 	model = User
 	form_class = UserRegisterForm
 	success_url = reverse_lazy('users:login')
@@ -55,6 +65,9 @@ class RegisterView(UserPassesTestMixin, CreateView):
 
 
 class EmailConfirmationSentView(TemplateView):
+	"""
+	Представление для отображения страницы с информацией о верификации
+	"""
 	template_name = 'users/user_verification.html'
 
 	def get_context_data(self, **kwargs):
@@ -63,6 +76,9 @@ class EmailConfirmationSentView(TemplateView):
 
 
 class UserConfirmEmailView(View):
+	"""
+	Представление для верификации пользователя по токену, полученному при переходе по ссылке из верификационного письма
+	"""
 	def get(self, request, token):
 		user = User.objects.get(token=token)
 
@@ -73,6 +89,9 @@ class UserConfirmEmailView(View):
 
 
 class UserUpdateView(LoginRequiredMixin, UpdateView):
+	"""
+	Представление для обновления пользователя
+	"""
 	model = User
 	form_class = UserForm
 	success_url = reverse_lazy('users:profile')
@@ -82,6 +101,9 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
 
 
 class UserListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
+	"""
+	Представление для отображения списка пользователей авторизованному пользователю с правами стаффа
+	"""
 	model = User
 	def test_func(self):
 		return self.request.user.is_staff
@@ -94,6 +116,9 @@ class UserListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
 
 
 class UserDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+	"""
+	Представление для удаления клиента авторизованному пользователю с правами стаффа
+	"""
 	model = User
 	success_url = reverse_lazy('users:list_user')
 
@@ -107,6 +132,9 @@ class UserDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
 
 def generate_password(request):
+	"""
+	Контроллер для генерации нового пароля пользователю, с отправкой пароля на почту
+	"""
 
 	new_password = secrets.token_hex(nbytes=8)
 	request.user.set_password(new_password)
@@ -124,6 +152,9 @@ def generate_password(request):
 
 @user_passes_test(lambda u: u.is_superuser)
 def toggle_staff(*args, **kwargs):
+	"""
+	Контроллер для редактирования прав стаффа пользователем, являющимся суперпользователем
+	"""
 	user = get_object_or_404(User, pk=kwargs.get('pk'))
 	if user.is_staff:
 		user.is_staff = False
@@ -137,6 +168,9 @@ def toggle_staff(*args, **kwargs):
 
 
 def toggle_activity(*args, **kwargs):
+	"""
+	Контроллер для редактирования активности пользователя
+	"""
 	user = get_object_or_404(User, pk=kwargs.get('pk'))
 	if user.is_active:
 		user.is_active = False

@@ -4,6 +4,9 @@ from users.models import User
 
 
 class Command(BaseCommand):
+    """
+    Консольная команда для создания суперпользователя
+    """
 
     def handle(self, *args, **options):
         user = User.objects.create(

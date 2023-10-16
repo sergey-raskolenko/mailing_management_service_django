@@ -4,6 +4,9 @@ from users.models import NULLABLE, User
 
 
 class Client(models.Model):
+	"""
+	Модель для описания клиента
+	"""
 	email = models.EmailField(max_length=50, verbose_name='email')
 	name = models.CharField(max_length=50, verbose_name='имя', **NULLABLE)
 	surname = models.CharField(max_length=50, verbose_name='фамилия', **NULLABLE)

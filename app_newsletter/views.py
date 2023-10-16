@@ -25,6 +25,10 @@ class NewsletterListView(LoginRequiredMixin, ListView):
 
 
 class NewsletterCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
+	"""
+	Представление для создания новой рассылки авторизованным пользователем, кроме стаффа.
+	При создании рассылки автоматически отправляется сообщение для клиентов, указанных в ней
+	"""
 	model = Newsletter
 	form_class = NewsletterCreateForm
 	success_url = reverse_lazy('newsletter:list_newsletter')
@@ -43,7 +47,6 @@ class NewsletterCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
 		newsletter = form.save(commit=False)
 		newsletter.created_by = self.request.user
 		newsletter.status = 'создана'
-		newsletter.save()
 		# log creation of creating
 		NewsletterLog.objects.create_log(newsletter, newsletter.status)
 
@@ -62,6 +65,10 @@ class NewsletterCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
 
 
 class NewsletterUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+	"""
+	Представление для обновления рассылки авторизованным пользователем, кроме стаффа.
+	После редактирования рассылки автоматически отправляется сообщение для клиентов, указанных в ней
+	"""
 	model = Newsletter
 	form_class = NewsletterCreateForm
 	success_url = reverse_lazy('newsletter:list_newsletter')
@@ -99,6 +106,9 @@ class NewsletterUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
 
 class NewsletterDeleteView(LoginRequiredMixin, DeleteView):
+	"""
+	Представление для удаления рассылки авторизованному пользователю
+	"""
 	model = Newsletter
 	success_url = reverse_lazy('newsletter:list_newsletter')
 
@@ -107,19 +117,11 @@ class NewsletterDeleteView(LoginRequiredMixin, DeleteView):
 		context_data['title'] = 'Удаление рассылки'
 		return context_data
 
-	def delete(self, request, *args, **kwargs):
-		self.object = self.get_object()
-		success_url = self.get_success_url()
-
-		self.object.status = 'удалена'
-		# log creation of deleting
-		NewsletterLog.objects.create_log(self.object, self.object.status)
-
-		self.object.is_active = False
-		return HttpResponseRedirect(success_url)
-
 
 class NewsletterDetailView(LoginRequiredMixin, DetailView):
+	"""
+	Представление для детального отображения рассылки авторизованному пользователю
+	"""
 	model = Newsletter
 
 	def get_context_data(self, **kwargs):
@@ -129,6 +131,9 @@ class NewsletterDetailView(LoginRequiredMixin, DetailView):
 
 
 def toggle_is_active(*args, **kwargs):
+	"""
+	Контроллер для изменения поля активности рассылки
+	"""
 	print(kwargs.get('pk'))
 	newsletter = get_object_or_404(Newsletter, pk=kwargs.get('pk'))
 	if newsletter.is_active:
@@ -141,8 +146,10 @@ def toggle_is_active(*args, **kwargs):
 
 
 class NewsletterLogListView(LoginRequiredMixin, ListView):
+	"""
+	Представление для отображения списка логов конкретной рассылки авторизованному пользователю
+	"""
 	model = NewsletterLog
-	# Просмотр логов по конкретной рассылке?
 
 	def get_queryset(self):
 		queryset = super().get_queryset().filter(newsletter_id=self.kwargs.get('pk'))

@@ -1,9 +1,11 @@
 from django.core.cache import cache
-from django.db import models
 from config import settings
 
 
 def cache_object_list(model):
+	"""
+	Функция для создания кэш-листа объектов для объектов модели: model
+	"""
 	if settings.CACHE_ENABLED:
 		name = str(model).split(".")[2][:-2]
 		key = f'{name}_list'

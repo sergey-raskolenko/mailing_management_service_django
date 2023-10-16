@@ -5,6 +5,9 @@ from users.models import User
 
 
 class StyleFormMixin:
+	"""
+	Миксин-класс для применения к полям формы CSS стилей
+	"""
 	def __init__(self, *args, **kwargs):
 		super().__init__(*args, **kwargs)
 		for field_name, field in self.fields.items():
@@ -12,10 +15,16 @@ class StyleFormMixin:
 
 
 class UserLoginForm(StyleFormMixin, AuthenticationForm):
+	"""
+	Форма аутентификации пользователя
+	"""
 	pass
 
 
 class UserRegisterForm(StyleFormMixin, UserCreationForm):
+	"""
+	Форма регистрации пользователя
+	"""
 
 	class Meta:
 		model = User
@@ -23,6 +32,9 @@ class UserRegisterForm(StyleFormMixin, UserCreationForm):
 
 
 class UserForm(StyleFormMixin, UserChangeForm):
+	"""
+	Форма для изменения пользователя
+	"""
 
 	class Meta:
 		model = User

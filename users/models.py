@@ -39,7 +39,9 @@ class UserManager(UserBaseManager):
 
 
 class User(AbstractUser):
-
+    """
+    Модель, описывающая пользователя сервиса рассылок
+    """
     objects = UserManager()
 
     username = None

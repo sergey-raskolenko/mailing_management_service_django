@@ -3,6 +3,9 @@ from .models import Message
 
 
 class MessageForm(forms.ModelForm):
+	"""
+	Форма создания нового сообщения для рассылки
+	"""
 
 	class Meta:
 		model = Message

@@ -8,6 +8,9 @@ from main.services import cache_object_list
 
 
 class ClientCreateView(LoginRequiredMixin, CreateView):
+	"""
+	Представление для создания нового клиента авторизованным пользователем
+	"""
 	model = Client
 	form_class = ClientCreateForm
 	success_url = reverse_lazy('client:list_client')
@@ -26,6 +29,9 @@ class ClientCreateView(LoginRequiredMixin, CreateView):
 
 
 class ClientUpdateView(LoginRequiredMixin, UpdateView):
+	"""
+	Представление для обновления клиента авторизованным пользователем
+	"""
 	model = Client
 	form_class = ClientCreateForm
 	success_url = reverse_lazy('client:list_client')
@@ -37,6 +43,9 @@ class ClientUpdateView(LoginRequiredMixin, UpdateView):
 
 
 class ClientListView(LoginRequiredMixin, ListView):
+	"""
+	Представление для отображения списка клиентов авторизованному пользователю
+	"""
 	model = Client
 
 	def get_context_data(self, **kwargs):
@@ -51,6 +60,9 @@ class ClientListView(LoginRequiredMixin, ListView):
 
 
 class ClientDetailView(LoginRequiredMixin, DetailView):
+	"""
+	Представление для детального отображения клиента авторизованному пользователю
+	"""
 	model = Client
 
 	def get_context_data(self, **kwargs):
@@ -60,6 +72,9 @@ class ClientDetailView(LoginRequiredMixin, DetailView):
 
 
 class ClientDeleteView(LoginRequiredMixin, DeleteView):
+	"""
+	Представление для удаления клиента авторизованному пользователю
+	"""
 	model = Client
 	success_url = reverse_lazy('client:list_client')
 

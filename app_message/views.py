@@ -8,6 +8,9 @@ from main.services import cache_object_list
 
 
 class MessageCreateView(LoginRequiredMixin, CreateView):
+	"""
+	Представление для создания нового сообщения авторизованным пользователем
+	"""
 	model = Message
 	form_class = MessageForm
 	success_url = reverse_lazy('message:list_message')
@@ -26,6 +29,9 @@ class MessageCreateView(LoginRequiredMixin, CreateView):
 
 
 class MessageUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+	"""
+	Представление для обновления сообщения авторизованным пользователем, кроме стаффа
+	"""
 	model = Message
 	form_class = MessageForm
 	success_url = reverse_lazy('message:list_message')
@@ -42,6 +48,9 @@ class MessageUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
 
 class MessageListView(LoginRequiredMixin, ListView):
+	"""
+	Представление для отображения списка сообщений авторизованному пользователю
+	"""
 	model = Message
 
 	def get_context_data(self, **kwargs):
@@ -56,6 +65,9 @@ class MessageListView(LoginRequiredMixin, ListView):
 
 
 class MessageDetailView(LoginRequiredMixin, DetailView):
+	"""
+	Представление для детального отображения сообщения авторизованному пользователю
+	"""
 	model = Message
 
 	def get_context_data(self, **kwargs):
@@ -65,6 +77,9 @@ class MessageDetailView(LoginRequiredMixin, DetailView):
 
 
 class MessageDeleteView(LoginRequiredMixin, DeleteView):
+	"""
+	Представление для удаления сообщения авторизованному пользователю
+	"""
 	model = Message
 	success_url = reverse_lazy('message:list_message')
 

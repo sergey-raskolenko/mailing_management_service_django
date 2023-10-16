@@ -7,6 +7,10 @@ from main.services import cache_object_list
 
 
 class IndexTemplateView(TemplateView):
+	"""
+	Представление для отображения главной страницы с 3 последними постами блога, общим числом рассылок,
+	числом активных рассылок, числом уникальных клиентов
+	"""
 	template_name = 'main/index.html'
 
 	def get_context_data(self, **kwargs):
