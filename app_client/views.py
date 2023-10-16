@@ -42,7 +42,7 @@ class ClientListView(LoginRequiredMixin, ListView):
 	def get_context_data(self, **kwargs):
 		context_data = super().get_context_data(**kwargs)
 		context_data['title'] = 'Все мои клиенты'
-		object_list = cache_object_list(Client)
+		object_list = Client.objects.all()
 		if self.request.user.is_staff:
 			context_data['object_list'] = object_list
 		else:

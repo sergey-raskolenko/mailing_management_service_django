@@ -16,25 +16,31 @@ def send_newsletter(newsletter: Newsletter):
 			[i.email for i in newsletter.clients.all()],
 		)
 		newsletter.last_send = now()
-		NewsletterLog.objects.create_log(newsletter, 'отправлена', now())
+		newsletter.status = 'запущена'
+		newsletter.save()
+		NewsletterLog.objects.create_log(newsletter, newsletter.status, now(), '200')
 	except SMTPException as error:
-		NewsletterLog.objects.create_log(newsletter, 'не отправлена', now(), error)
+		NewsletterLog.objects.create_log(newsletter, 'ошибка', now(), error.args[0])
 
 
 def manage_schedule(scheduler):
 	newsletters = Newsletter.objects.all()
 	if newsletters:
 		for newsletter in newsletters:
-			job_id = newsletter.id
-			if check_task_for_send(newsletter):
-				create_newsletters_schedules(scheduler, newsletter)
-			else:
-				# Рассылка все равно приходит, не получается ее удалить или поставить на паузу
-				if scheduler.get_job(job_id):
-					scheduler.pause_job(job_id)
+			if not newsletter.status == 'завершена':
+				job_id = newsletter.id
+				if check_task_for_send(newsletter):
+					create_newsletter_task(scheduler, newsletter)
+				else:
+					# Рассылка все равно приходит, не получается ее удалить или поставить на паузу
+					if scheduler.get_job(job_id):
+						scheduler.pause_job(job_id)
+						newsletter.status = 'приостановлена'
+						newsletter.save()
+						NewsletterLog.objects.create_log(newsletter, newsletter.status, now(), '')
 
 
-def create_newsletters_schedules(scheduler, newsletter: Newsletter):
+def create_newsletter_task(scheduler, newsletter: Newsletter):
 	if newsletter.periodicity == 'D':
 		scheduler.add_job(
 			send_newsletter,
@@ -68,8 +74,16 @@ def create_newsletters_schedules(scheduler, newsletter: Newsletter):
 
 
 def check_task_for_send(newsletter: Newsletter) -> bool:
-	if now() <= newsletter.mail_time_to and newsletter.is_active:
-		return True
+	if newsletter.is_active:
+		if newsletter.mail_time_from <= now():
+			if now() <= newsletter.mail_time_to:
+				return True
+			else:
+				newsletter.status = 'завершена'
+				newsletter.save()
+				NewsletterLog.objects.create_log(newsletter, newsletter.status, now(), '')
+				return False
+		else:
+			return False
 	else:
 		return False
-

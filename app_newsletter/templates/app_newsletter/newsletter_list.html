@@ -42,7 +42,7 @@
                            class="btn btn-sm btn-danger">Удалить</a>
                     </div>
                     <div class="btn-group m-1">
-                        {% if user.is_staff %}
+                        {% if user.is_staff or user.is_superuser %}
                         {% if object.is_active %}
                         <a href="{% url 'newsletter:toggle_is_active' object.pk %}"
                            class="btn btn-sm btn-warning">Deactivate</a>

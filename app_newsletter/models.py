@@ -44,7 +44,7 @@ class NewsletterLog(models.Model):
 	newsletter = models.ForeignKey(Newsletter, verbose_name='рассылка', on_delete=models.CASCADE)
 	status = models.CharField(max_length=50, verbose_name='статус попытки')
 	last_try = models.DateTimeField(verbose_name='последняя отправка')
-	server_answer = models.SmallIntegerField(verbose_name='ответ сервера', blank=True, null=True)
+	server_answer = models.CharField(max_length=50, verbose_name='ответ сервера', blank=True, null=True)
 
 	objects = LogManager()
 
