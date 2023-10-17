@@ -111,7 +111,6 @@ class UserListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
 	def get_context_data(self, **kwargs):
 		context_data = super().get_context_data(**kwargs)
 		context_data['title'] = 'Список пользователей'
-		context_data['object_list'] = User.objects.all()
 		return context_data
 
 

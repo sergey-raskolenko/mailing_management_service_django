@@ -43,7 +43,7 @@ class NewsletterCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
 		return context_data
 
 	def form_valid(self, form):
-		newsletter = form.save(commit=False)
+		newsletter = form.save()
 		newsletter.created_by = self.request.user
 		newsletter.status = 'создана'
 		# log creation of creating
@@ -83,9 +83,8 @@ class NewsletterUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 		return context_data
 
 	def form_valid(self, form):
-		newsletter = form.save(commit=False)
+		newsletter = form.save()
 		newsletter.status = 'отредактирована'
-		newsletter.save()
 		# log creation of creating
 		NewsletterLog.objects.create_log(newsletter, newsletter.status)
 
